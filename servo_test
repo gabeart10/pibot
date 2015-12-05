@@ -12,18 +12,27 @@ p = GPIO.PWM(16, 50)
 p2 = GPIO.PWM(12, 50)
 p3 = GPIO.PWM(21, 50)
 
-while True:
-    p.ChangeDutyCycle(2.5)
-    p2.ChangeDutyCycle(2.5)
-    p3.ChangeDutyCycle(2.5)
-    time.sleep(1)
+p.start(2.5)
+p2.start(2.5)
+p3.start(2.5)
+try:
+    while True:
+        p.ChangeDutyCycle(2.5)
+        p2.ChangeDutyCycle(2.5)
+        p3.ChangeDutyCycle(2.5)
+        time.sleep(1)
+        p.ChangeDutyCycle(7.5)
+        p2.ChangeDutyCycle(7.5)
+        p3.ChangeDutyCycle(7.5)
+        time.sleep(1)
+        p.ChangeDutyCycle(12.5)
+        p2.ChangeDutyCycle(12.5)
+        p3.ChangeDutyCycle(12.5)
+        time.sleep(1)
+except KeyboardInterrupt:
     p.ChangeDutyCycle(7.5)
     p2.ChangeDutyCycle(7.5)
     p3.ChangeDutyCycle(7.5)
     time.sleep(1)
-    p.ChangeDutyCycle(12.5)
-    p2.ChangeDutyCycle(12.5)
-    p3.ChangeDutyCycle(12.5)
-    time.sleep(1)
-
-
+    GPIO.cleanup()
+    exit()

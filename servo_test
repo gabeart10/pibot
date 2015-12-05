@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+pins = [16,20,21]
+
+GPIO.setup(pins, GPIO.OUT)
+
+p = GPIO.PWM(16, 50)
+p2 = GPIO.PWM(20, 50)
+p3 = GPIO.PWM(21, 50)
+
+while True:
+    p.ChangeDutyCycle(7.5)
+    p2.ChangeDutyCycle(7.5)
+    p3.ChangeDutyCycle(7.5)
+

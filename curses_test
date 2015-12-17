@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import curses as c
+stdscr = c.initscr()
+stdscr.keypad(True)
+c.noecho()
+c.cbreak()
+try:
+    while True:
+        key = stdscr.getch()
+        if key == ord('w') or key == c.KEY_UP:
+            stdscr.addstr("up\n")
+        elif key == ord('s') or key == c.KEY_DOWN:
+            stdscr.addstr("down\n")
+        elif key == ord('d') or key == c.KEY_RIGHT:
+            stdscr.addstr("right\n")
+        elif key == ord('a') or key == c.KEY_LEFT:
+            stdscr.addstr("left\n")
+        elif key == ord('q'):
+            stdscr.clear()
+except KeyboardInterrupt:
+    c.endwin()
+    exit()

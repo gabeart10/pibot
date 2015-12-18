@@ -3,6 +3,7 @@ import curses as c
 import time
 stdscr = c.initscr()
 stdscr.keypad(True)
+stdscr.nodelay(True)
 c.noecho()
 c.cbreak()
 size = stdscr.getmaxyx()
@@ -15,28 +16,28 @@ def check(what):
     global x
     if what == 'up':
         y -= 1
-        if y < 0:
+        if y <= 0:
             y += 1
             return False
         else:
             return True
     elif what == 'down':
         y += 1
-        if y > size[0]:
+        if y >= size[0]:
             y -= 1
             return False
         else:
             return True
     elif what == 'right':
         x += 1
-        if x > size[1]:
+        if x >= size[1]:
             x -= 1
             return False
         else:
             return True
     elif what == 'left':
         x -= 1
-        if x < 0:
+        if x <= 0:
             x += 1
             return False
         else:
@@ -50,55 +51,62 @@ def fire(direc):
         while yf > 0:
             stdscr.clear()
             stdscr.addstr(yf,xf,"|")
-            stdscr.addstr(y,x,'Robot!')
+            move()
             yf -= 1
             stdscr.refresh()
-            time.sleep(0.1)
+            time.sleep(0.01)
     if direc == 'down':
         while yf < size[0]:
             stdscr.clear()
             stdscr.addstr(yf,xf,"|")
-            stdscr.addstr(y,x,'Robot!')
+            move()
             yf += 1
             stdscr.refresh()
-            time.sleep(0.1)
+            time.sleep(0.01)
     if direc == 'right':
         while xf < size[1]:
             stdscr.clear()
             stdscr.addstr(yf,xf,"-")
-            stdscr.addstr(y,x,'Robot!')
+            move()
             xf += 1
             stdscr.refresh()
-            time.sleep(0.1)
+            time.sleep(0.01)
     if direc == 'left':
         while xf > 0:
             stdscr.clear()
             stdscr.addstr(yf,xf,"-")
-            stdscr.addstr(y,x,'Robot!')
+            move()
             xf -= 1
             stdscr.refresh()
-            time.sleep(0.1)
-        
+            time.sleep(0.01)
+def move(clear_stat=False):
+    global key
+    key = stdscr.getch()
+    stdscr.addstr(y,x,'Robot!')
+    if key == ord('w'):
+        if check('up'):
+            if clear_stat:
+                stdscr.clear()
+            stdscr.addstr(y,x,'Robot!')
+    elif key == ord('s'):
+        if check('down'):
+            if clear_stat:
+                stdscr.clear()
+            stdscr.addstr(y,x,'Robot!')
+    elif key == ord('d'):
+        if check('right'):
+            if clear_stat:
+                stdscr.clear()
+            stdscr.addstr(y,x,'Robot!')
+    elif key == ord('a'):
+        if check('left'):
+            if clear_stat:
+                stdscr.clear()
+            stdscr.addstr(y,x,'Robot!')
 try:
     while True:
-        key = stdscr.getch()
-        if key == ord('w'):
-            if check('up'):
-                stdscr.clear()
-                stdscr.addstr(y,x,'Robot!')
-        elif key == ord('s'):
-            if check('down'):
-                stdscr.clear()
-                stdscr.addstr(y,x,'Robot!')
-        elif key == ord('d'):
-            if check('right'):
-                stdscr.clear()
-                stdscr.addstr(y,x,'Robot!')
-        elif key == ord('a'):
-            if check('left'):
-                stdscr.clear()
-                stdscr.addstr(y,x,'Robot!')
-        elif key == c.KEY_UP:
+        move(True)
+        if key == c.KEY_UP:
             fire('up')
         elif key == c.KEY_DOWN:
             fire('down')

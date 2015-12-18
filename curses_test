@@ -4,19 +4,65 @@ stdscr = c.initscr()
 stdscr.keypad(True)
 c.noecho()
 c.cbreak()
+size = stdscr.getmaxyx()
+y = round(size[0]/2)
+x = round(size[1]/2-3)
+stdscr.addstr(y,x,'Robot!')
+
+def check(what):
+    global y
+    global x
+    if what == 'up':
+        y -= 1
+        if y < 0:
+            y += 1
+            return False
+        else:
+            return True
+    elif what == 'down':
+        y += 1
+        if y > size[0]:
+            y -= 1
+            return False
+        else:
+            return True
+    elif what == 'right':
+        x += 1
+        if x > size[1]:
+            x -= 1
+            return False
+        else:
+            return True
+    elif what == 'left':
+        x -= 1
+        if x < 0:
+            x += 1
+            return False
+        else:
+            return True
+    else:
+        return False
+
+
 try:
     while True:
         key = stdscr.getch()
         if key == ord('w') or key == c.KEY_UP:
-            stdscr.addstr("up\n")
+            if check('up'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
         elif key == ord('s') or key == c.KEY_DOWN:
-            stdscr.addstr("down\n")
+            if check('down'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
         elif key == ord('d') or key == c.KEY_RIGHT:
-            stdscr.addstr("right\n")
+            if check('right'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
         elif key == ord('a') or key == c.KEY_LEFT:
-            stdscr.addstr("left\n")
-        elif key == ord('q'):
-            stdscr.clear()
+            if check('left'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
 except KeyboardInterrupt:
     c.endwin()
     exit()

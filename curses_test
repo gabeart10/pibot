@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import curses as c
+import time
 stdscr = c.initscr()
 stdscr.keypad(True)
 c.noecho()
@@ -42,8 +43,116 @@ def check(what):
             return True
     else:
         return False
-
-
+def fire(direc):
+    xf = x
+    yf = y
+    if direc == 'up':
+        while yf > 0:
+            stdscr.clear()
+            stdscr.addstr(yf,xf,"|")
+            stdscr.addstr(y,x,'Robot!')
+            yf -= 1
+            stdscr.refresh()
+            time.sleep(0.1)
+    if direc == 'down':
+        while yf < size[0]:
+            stdscr.clear()
+            stdscr.addstr(yf,xf,"|")
+            stdscr.addstr(y,x,'Robot!')
+            yf += 1
+            stdscr.refresh()
+            time.sleep(0.1)
+    if direc == 'right':
+        while xf < size[1]:
+            stdscr.clear()
+            stdscr.addstr(yf,xf,"-")
+            stdscr.addstr(y,x,'Robot!')
+            xf += 1
+            stdscr.refresh()
+            time.sleep(0.1)
+    if direc == 'left':
+        while xf > 0:
+            stdscr.clear()
+            stdscr.addstr(yf,xf,"-")
+            stdscr.addstr(y,x,'Robot!')
+            xf -= 1
+            stdscr.refresh()
+            time.sleep(0.1)
+        
+try:
+    while True:
+        key = stdscr.getch()
+        if key == ord('w'):
+            if check('up'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('s'):
+            if check('down'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('d'):
+            if check('right'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('a'):
+            if check('left'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == c.KEY_UP:
+            fire('up')
+        elif key == c.KEY_DOWN:
+            fire('down')
+        elif key == c.KEY_RIGHT:
+            fire('right')
+        elif key == c.KEY_LEFT:
+            fire('left')
+except KeyboardInterrupt:
+    c.endwin()
+    exit()   
+try:
+    while True:
+        key = stdscr.getch()
+        if key == ord('w') or key == c.KEY_UP:
+            if check('up'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('s') or key == c.KEY_DOWN:
+            if check('down'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('d') or key == c.KEY_RIGHT:
+            if check('right'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('a') or key == c.KEY_LEFT:
+            if check('left'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+except KeyboardInterrupt:
+    c.endwin()
+    exit()    
+try:
+    while True:
+        key = stdscr.getch()
+        if key == ord('w') or key == c.KEY_UP:
+            if check('up'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('s') or key == c.KEY_DOWN:
+            if check('down'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('d') or key == c.KEY_RIGHT:
+            if check('right'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+        elif key == ord('a') or key == c.KEY_LEFT:
+            if check('left'):
+                stdscr.clear()
+                stdscr.addstr(y,x,'Robot!')
+except KeyboardInterrupt:
+    c.endwin()
+    exit()   
 try:
     while True:
         key = stdscr.getch()

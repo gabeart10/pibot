@@ -33,7 +33,7 @@ rotator = 7.5
 upper_boom = 7.5
 mode = 0
 
-parts = [lower_servo,main_boom,roator,upper_boom]
+parts = [lower_servo,main_boom,rotator,upper_boom]
 
 
 

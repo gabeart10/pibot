@@ -35,11 +35,11 @@ mode = 0
 
 try:
     while True:
+        key = ser.getch()
         mem_ls = lower_servo
         mem_mb = main_boom
         mem_r = rotator
         mem_ub = upper_boom
-        key = ser.getch()
         if key == ord('m'):
             if mode < 2:
                 mode += 1
@@ -48,44 +48,37 @@ try:
             else:
                 print('ERROR')
         elif key == c.KEY_LEFT:
-            if not lower_servo == 0:
+            if lower_servo != 0:
                 lower_servo -= 0.1
         elif key == c.KEY_RIGHT:
-            if not lower_servo == 12.5:
+            if lower_servo != 12.5:
                 lower_servo += 0.1
         elif key == c.KEY_UP:
             if mode == 0:
-                if not rotator == 12.5:
+                if rotator != 12.5:
                     rotator += 0.1
             elif mode == 1:
-                if not main_boom == 12.5:
+                if main_boom != 12.5:
                     main_boom += 0.1
             elif mode == 2:
-                if not upper_boom == 12.5:
+                if upper_boom != 12.5:
                     upper_boom += 0.1
         elif key == c.KEY_DOWN:
             if mode == 0:
-                if not rotator == 0:
+                if rotator != 0:
                     rotator -= 0.1
             elif mode == 1:
-                if not main_boom == 0:
+                if main_boom != 0:
                     main_boom -= 0.1
             elif mode == 2:
-                if not upper_boom == 0:
+                if upper_boom != 0:
                     upper_boom -= 0.1
-        for c_p in p:
-            if c_p == p1:
-                if not mem_r == rotator:
-                    c_p.ChangeDutyCycle(rotator)
-            if c_p == p2:
-                if not mem_ls == lower_servo:
-                    c_p.ChangeDutyCycle(lower_servo)
-            if c_p == p3:
-                if not mem_ub == upper_boom:
-                    c_p.ChangeDutyCycle(rotator)
-            if c_p == p4:
-                if not mem_mb == main_boom:
-                    c_p.ChangeDutyCycle(main_boom)
+        
+        p1.ChangeDutyCycle(rotator)
+        p2.ChangeDutyCycle(lower_servo)
+        p3.ChangeDutyCycle(upper_boom)
+        p4.ChangeDutyCycle(main_boom)
+        
 except KeyboardInterrupt:
     c.endwin()
     GPIO.cleanup()

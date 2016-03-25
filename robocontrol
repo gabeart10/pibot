@@ -48,30 +48,30 @@ try:
             else:
                 print('ERROR')
         elif key == c.KEY_LEFT:
-            if lower_servo !< 2.5:
+            if not lower_servo < 2.5:
                 lower_servo -= 0.1
         elif key == c.KEY_RIGHT:
-            if lower_servo !> 12.5:
+            if not lower_servo > 12.5:
                 lower_servo += 0.1
         elif key == c.KEY_UP:
             if mode == 0:
-                if rotator !> 12.5:
+                if not rotator > 12.5:
                     rotator += 0.1
             elif mode == 1:
-                if main_boom !> 12.5:
+                if not main_boom > 12.5:
                     main_boom += 0.1
             elif mode == 2:
-                if upper_boom !> 12.5:
+                if not upper_boom > 12.5:
                     upper_boom += 0.1
         elif key == c.KEY_DOWN:
             if mode == 0:
-                if rotator !< 2.5:
+                if not rotator < 2.5:
                     rotator -= 0.1
             elif mode == 1:
-                if main_boom !< 2.5:
+                if not main_boom < 2.5:
                     main_boom -= 0.1
             elif mode == 2:
-                if upper_boom !< 2.5:
+                if not upper_boom < 2.5:
                     upper_boom -= 0.1
         round(rotator, 1)
         round(lower_servo, 1)

@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import RPi.GPIO as GPIO
+import curses as c
+import time
+ser = c.initscr()
+c.noecho()
+c.cbreak()
+ser.keypad(True)
+ser.nodelay(True)
+#Main Boom 12
+#Lower Servo 20
+#Rotator 21
+#Upper Boom 16
+pins = [21,20,16,12]
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pins, GPIO.OUT)
+
+p1 = GPIO.PWM(21, 50)
+p2 = GPIO.PWM(20, 50)
+p3 = GPIO.PWM(16, 50)
+p4 = GPIO.PWM(12, 50)
+
+p = [p1,p2,p3,p4]
+
+for c_p in p:
+    c_p.start(7.5)
+    time.sleep(0.5)
+
+lower_servo = 7.5
+main_boom = 7.5
+rotator = 7.5
+upper_boom = 7.5
+mode = 0
+
+try:
+    while True:
+        mem_ls = lower_servo
+        mem_mb = main_boom
+        mem_r = rotator
+        mem_ub = upper_boom
+        key = ser.getch()
+        if key == ord('m'):
+            if mode < 2:
+                mode += 1
+            elif mode == 2:
+                mode = 0
+            else:
+                print('ERROR')
+        elif key == c.KEY_LEFT:
+            if not lower_servo == 0:
+                lower_servo -= 0.1
+        elif key == c.KEY_RIGHT:
+            if not lower_servo == 12.5:
+                lower_servo += 0.1
+        elif key == c.KEY_UP:
+            if mode == 0:
+                if not rotator == 12.5:
+                    rotator += 0.1
+            elif mode == 1:
+                if not main_boom == 12.5:
+                    main_boom += 0.1
+            elif mode == 2:
+                if not upper_boom == 12.5:
+                    upper_boom += 0.1
+        elif key == c.KEY_DOWN:
+            if mode == 0:
+                if not rotator == 0:
+                    rotator -= 0.1
+            elif mode == 1:
+                if not main_boom == 0:
+                    main_boom -= 0.1
+            elif mode == 2:
+                if not upper_boom == 0:
+                    upper_boom -= 0.1
+        for c_p in p:
+            if c_p == p1:
+                if not mem_r == rotator:
+                    c_p.ChangeDutyCycle(rotator)
+            if c_p == p2:
+                if not mem_ls == lower_servo:
+                    c_p.ChangeDutyCycle(lower_servo)
+            if c_p == p3:
+                if not mem_ub == upper_boom:
+                    c_p.ChangeDutyCycle(rotator)
+            if c_p == p4:
+                if not mem_mb == main_boom:
+                    c_p.ChangeDutyCycle(main_boom)
+except KeyboardInterrupt:
+    c.endwin()
+    GPIO.cleanup()
+    exit()
+

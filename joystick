@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+import pygame as p
+import os
+p.init()
+p.joystick.init()
+Joy = p.joystick.Joystick(0)
+Joy.init()
+print(Joy.get_name())
+while True:
+    for i in range(0, Joy.get_numbuttons()):
+    if Joy.get_button(i):
+            print("True")
+        else:
+            print("False")
+    os.system('clear')

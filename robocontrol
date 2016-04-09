@@ -25,6 +25,7 @@ p = [p1,p2,p3,p4]
 
 for c_p in p:
     c_p.start(7.5)
+    time.sleep(0.5)
 
 lower_servo = 7.5
 main_boom = 7.5

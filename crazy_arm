@@ -2,26 +2,32 @@
 import RPi.GPIO as GPIO
 import random as r
 import time
-
+import os
 pins = [21,20,12,16]
-p = [p1,p2,p3,p4]
-
-
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pins, GPIO.OUT)
+
+
+p1 = GPIO.PWM(21, 50)
+p2 = GPIO.PWM(20, 50)
+p3 = GPIO.PWM(12, 50)
+p4 = GPIO.PWM(16, 50)
+p = [p1,p2,p3,p4]
 for c_p in p:
-    c_p.PWM(pins[p.index(c_P)], 50)
     c_p.start(7.5)
 try:
     while True:
-        main_boom = [r.uniform(2.5,12.5),r.randint(0,1)]
-        roataor = [r.uniform(2.5,12.5),r.randint(0,1)]
-        lower_servo = [r.uniform(2.5,12.5),r.randint(0,1)]
-        upper_boom = [r.uniform(2.5,12.5),r.randint(0,1)]
-        servos = [main_boom, roator, lower_servo, upper_boom]
+        main_boom = [p3,r.uniform(2.5,12.5),r.randint(0,1)]
+        rotator = [p1,r.uniform(2.5,12.5),r.randint(0,1)]
+        lower_servo = [p2,r.uniform(2.5,12.5),r.randint(0,1)]
+        upper_boom = [p4,r.uniform(2.5,12.5),r.randint(0,1)]
+        servos = [main_boom, rotator, lower_servo, upper_boom]
         for servo in servos:
-            if servo[1] == 1:
-                servo.ChangeDutyCycle(servo[0])
+            if servo[2] == 1:
+                servo[0].ChangeDutyCycle(servo[1])
+                print(servo)
+                time.sleep(0.5)
+        os.system('clear')
 except KeyboardInterrupt:
     GPIO.cleanup()
     exit()

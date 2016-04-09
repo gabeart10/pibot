@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+import RPi.GPIO as GPIO
+import time
+import evdev
+#Main Boom 12
+#Lower Servo 20
+#Rotator 21
+#Upper Boom 16
+pins = [21,20,16,12]
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pins, GPIO.OUT)
+
+p1 = GPIO.PWM(21, 50)
+p2 = GPIO.PWM(20, 50)
+p3 = GPIO.PWM(16, 50)
+p4 = GPIO.PWM(12, 50)
+
+p = [p1,p2,p3,p4]
+
+for c_p in p:
+    c_p.start(7.5)
+    time.sleep(0.5)
+
+lower_servo = 7.5
+main_boom = 7.5
+rotator = 7.5
+upper_boom = 7.5
+mode = 0
+
+active_right = False
+active_left = False
+active_up = False
+active_down = False
+
+parts = [lower_servo,main_boom,rotator,upper_boom]
+
+device = evdev.InputDevice('/dev/input/event0')
+
+try:
+    while True:
+        event = device.read_one()
+        if event != None:
+            if event.code == 00 and event.value == 127:
+                active_right = False
+                active_left = False
+            elif event.code == 1 and event.value == 127:
+                active_down = False
+                active_up = False
+
+            if event.code == 308:
+                if mode > 0:
+                    mode -= 1
+                elif mode == 0:
+                    mode = 2
+                else:
+                    print('ERROR')
+            elif event.code == 309:
+                if mode < 2:
+                    mode += 1
+                elif mode == 2:
+                    mode = 0
+                else:
+                    print('ERROR')
+            elif event.code == 00 and event.value == 00 and event.type == 3 or active_right:
+                active_right = True
+                if not lower_servo < 2.5:
+                    lower_servo -= 0.1
+            elif event.code == 00 and event.value == 255 and event.type == 3 or active_left:
+                active_left = True
+                if not lower_servo > 12.5:
+                    lower_servo += 0.1
+            elif event.code == 1 and event.value == 255 or active_down:
+                active_down = True
+                if mode == 0:
+                    if not rotator > 12.5:
+                        rotator += 0.1
+                elif mode == 1:
+                    if not main_boom > 12.5:
+                        main_boom += 0.1
+                elif mode == 2:
+                    if not upper_boom > 12.5:
+                        upper_boom += 0.1
+            elif event.code == 1 and event.value == 00 or active_up:
+                active_up = True
+                if mode == 0:
+                    if not rotator < 2.5:
+                        rotator -= 0.1
+                elif mode == 1:
+                    if not main_boom < 2.5:
+                        main_boom -= 0.1
+                elif mode == 2:
+                    if not upper_boom < 2.5:
+                        upper_boom -= 0.1
+            round(rotator, 1)
+            round(lower_servo, 1)
+            round(upper_boom, 1)
+            round(main_boom, 1)
+            p1.ChangeDutyCycle(rotator)
+            p2.ChangeDutyCycle(lower_servo)
+            p3.ChangeDutyCycle(upper_boom)
+            p4.ChangeDutyCycle(main_boom)
+        elif active_right or active_left or active_up or active_down:
+            if active_right:
+                if not lower_servo < 2.5:
+                    lower_servo -= 0.1
+            elif active_left:
+                if not lower_servo > 12.5:
+                    lower_servo += 0.1
+            elif active_down:
+                if mode == 0:
+                    if not rotator > 12.5:
+                        rotator += 0.1
+                elif mode == 1:
+                    if not main_boom > 12.5:
+                        main_boom += 0.1
+                elif mode == 2:
+                    if not upper_boom > 12.5:
+                        upper_boom += 0.1
+            elif active_up:
+                if mode == 0:
+                    if not rotator < 2.5:
+                        rotator -= 0.1
+                elif mode == 1:
+                    if not main_boom < 2.5:
+                        main_boom -= 0.1
+                elif mode == 2:
+                    if not upper_boom < 2.5:
+                        upper_boom -= 0.1
+            round(rotator, 1)
+            round(lower_servo, 1)
+            round(upper_boom, 1)
+            round(main_boom, 1)
+            p1.ChangeDutyCycle(rotator)
+            p2.ChangeDutyCycle(lower_servo)
+            p3.ChangeDutyCycle(upper_boom)
+            p4.ChangeDutyCycle(main_boom)
+            time.sleep(0.1)
+            
+except KeyboardInterrupt:
+    GPIO.cleanup()
+    exit()
+except KeyboardInterrupt:
+    GPIO.cleanup()
+    exit()
+

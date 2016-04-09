@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import RPi.GPIO as GPIO
+import time
+pins = [12,16,21,20,26]
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pins, GPIO.OUT)
+GPIO.setup(19, GPIO.IN)
+
+p = GPIO.PWM(12, 50)
+p2 = GPIO.PWM(16, 50)
+p3 = GPIO.PWM(21, 50)
+p4 = GPIO.PWM(20, 50)
+
+p.start(7.5)
+p2.start(7.5)
+p3.start(7.5)
+p4.start(7.5)
+
+def check_dis():
+    GPIO.output(26, 1)
+    time.sleep(0.00001)
+    GPIO.output(26, 0)
+
+    while GPIO.input(19) == 0:
+        start = time.time()
+    while GPIO.input(19) == 0:
+        stop == time.time()
+
+    duration = stop - start
+
+    distance = duration * 17150
+
+    return round(distance, 2)
+
+
+
+while True:
+    current_dis = check_dis()
+    print(current_dis)
+

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO
 import time
-pins = [12,16,21,20,26]
+pins = [12,16,21,20,26,5]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pins, GPIO.OUT)
 GPIO.setup(19, GPIO.IN)
@@ -23,8 +23,8 @@ def check_dis():
 
     while GPIO.input(19) == 0:
         start = time.time()
-    while GPIO.input(19) == 0:
-        stop == time.time()
+    while GPIO.input(19) == 1:
+        stop = time.time()
 
     duration = stop - start
 
@@ -32,9 +32,30 @@ def check_dis():
 
     return round(distance, 2)
 
-
-
+mode = 0
+move = 7.5
 while True:
     current_dis = check_dis()
-    print(current_dis)
+    if current_dis <= 35:
+        GPIO.output(5, 1)
+        pass
+    elif current_dis > 3000:
+        pass
+    else:
+        GPIO.output(5, 0)
+        if move >= 12.5:
+            mode = 1
+        elif move <= 2.5:
+            mode = 0
+
+        if mode == 0:
+            move += 0.1
+        elif mode == 1:
+            move -= 0.1
+    move = round(move, 1)
+    p.ChangeDutyCycle(7.5)
+    p2.ChangeDutyCycle(7.5)
+    p3.ChangeDutyCycle(7.5)
+    p4.ChangeDutyCycle(move)
+    time.sleep(0.1)
 

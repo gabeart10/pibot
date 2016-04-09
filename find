@@ -11,10 +11,14 @@ p2 = GPIO.PWM(16, 50)
 p3 = GPIO.PWM(21, 50)
 p4 = GPIO.PWM(20, 50)
 
+time.sleep(1)
+
 p.start(7.5)
 p2.start(7.5)
 p3.start(7.5)
 p4.start(7.5)
+
+time.sleep(1)
 
 def check_dis():
     GPIO.output(26, 1)

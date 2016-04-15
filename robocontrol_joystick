@@ -6,11 +6,11 @@ import evdev
 #Lower Servo 20
 #Rotator 21
 #Upper Boom 16
-pins = [21,20,16,12]
+pins = [21,20,16,12,5,26]
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pins, GPIO.OUT)
-
+GPIO.setup(19, GPIO.IN)
 p1 = GPIO.PWM(21, 50)
 p2 = GPIO.PWM(20, 50)
 p3 = GPIO.PWM(16, 50)
@@ -32,9 +32,20 @@ active_right = False
 active_left = False
 active_up = False
 active_down = False
-
+active = 0
 parts = [lower_servo,main_boom,rotator,upper_boom]
 
+def check_dis():
+    GPIO.output(26, 1)
+    time.sleep(0.00001)
+    GPIO.output(26, 0)
+    while GPIO.input(19) == 0:
+        start = time.time()
+    while GPIO.input(19) == 1:
+        stop = time.time()
+    duration = stop - start
+    distance = duration * 17150
+    return round(distance, 2)
 device = evdev.InputDevice('/dev/input/event0')
 
 try:
@@ -62,6 +73,18 @@ try:
                     mode = 0
                 else:
                     print('ERROR')
+            elif event.code == 305 and event.value == 1:
+                if active == 1:
+                    GPIO.output(5, 0)
+                    active = 0
+                elif active == 0:
+                    GPIO.output(5, 1)
+                    active = 1
+            elif event.code == 313 and event.value == 1:
+                GPIO.cleanup()
+                exit()
+            elif event.code == 304 and event.value == 1:
+                print(str(check_dis()) + 'cm')
             elif event.code == 00 and event.value == 00 and event.type == 3 or active_right:
                 active_right = True
                 if not lower_servo < 2.5:
@@ -137,9 +160,6 @@ try:
             p4.ChangeDutyCycle(main_boom)
             time.sleep(0.1)
             
-except KeyboardInterrupt:
-    GPIO.cleanup()
-    exit()
 except KeyboardInterrupt:
     GPIO.cleanup()
     exit()

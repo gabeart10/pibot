@@ -24,16 +24,12 @@ def check_dis():
     GPIO.output(26, 1)
     time.sleep(0.00001)
     GPIO.output(26, 0)
-
     while GPIO.input(19) == 0:
         start = time.time()
     while GPIO.input(19) == 1:
         stop = time.time()
-
     duration = stop - start
-
     distance = duration * 17150
-
     return round(distance, 2)
 
 mode = 0

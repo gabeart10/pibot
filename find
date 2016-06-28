@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO
 import time
+import espeak_py
 pins = [12,16,21,20,26,5]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pins, GPIO.OUT)
@@ -36,8 +37,9 @@ mode = 0
 move = 7.5
 while True:
     current_dis = check_dis()
-    if current_dis <= 35:
+    if current_dis <= 25:
         GPIO.output(5, 1)
+        espeak_py.say("Stop")
         pass
     elif current_dis > 3000:
         pass

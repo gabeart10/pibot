@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+import RPi.GPIO as GPIO
+import time
+
+#Main Boom 12
+#Lower Servo 20
+#Rotator 21
+#Upper Boom 16
+pins = [21,20,16,12,5,26]
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pins, GPIO.OUT)
+GPIO.setup(19, GPIO.IN)
+GPIO.setup(18, GPIO.IN)
+
+class Robot():
+    def __init__(self):
+        self.p1 = GPIO.PWM(21, 50)
+        self.p2 = GPIO.PWM(20, 50)
+        self.p3 = GPIO.PWM(16, 50)
+        self.p4 = GPIO.PWM(12, 50)
+        self.p = [p1,p2,p4]
+        for c_p in p:
+            c_p.start(7.5)
+            time.sleep(0.5)
+
+        p3.start(2.5)
+
+        self.p1_cy = 7.5
+        self.p2_cy = 7.5
+        self.p3_cy = 2.5
+        self.p4_cy = 7.5
+
+    def check_dis(self):
+        try:
+            GPIO.output(26, 1)
+            time.sleep(0.00001)
+            GPIO.output(26, 0)
+            while GPIO.input(19) == 0:
+                start = time.time()
+            while GPIO.input(19) == 1:
+                stop = time.time()
+            duration = stop - start
+            distance = duration * 17150
+            return round(distance, 2)
+        except:
+            return(3500)
+
+    def uptoface(self):
+        start_dis = check_dis()
+        while start_dis > 3 and self.p4_cy > 2.5:
+            start_dis = check_dis()
+            if start_dis > 3000:
+                continue
+            step = start_dis/100
+            self.p4_cy -= step
+            self.change_duty()
+            time.sleep(0.05)
+
+    def confused(self):
+        
+
+    def change_duty(self):
+        self.p1.ChangeDutyCycle(p1_cy) 
+        self.p2.ChangeDutyCycle(p2_cy) 
+        self.p3.ChangeDutyCycle(p3_cy) 
+        self.p4.ChangeDutyCycle(p4_cy) 
+
+
+while True:
+    change_duty()

@@ -17,10 +17,10 @@ for c_p in p:
     c_p.start(7.5)
 try:
     while True:
-        main_boom = [p3,r.uniform(2.5,12.5),r.randint(0,1)]
-        rotator = [p1,r.uniform(2.5,12.5),r.randint(0,1)]
-        lower_servo = [p2,r.uniform(2.5,12.5),r.randint(0,1)]
-        upper_boom = [p4,r.uniform(2.5,12.5),r.randint(0,1)]
+        main_boom = [p3,r.uniform(5,12.5),r.randint(0,1)]
+        rotator = [p1,r.uniform(5,12.5),r.randint(0,1)]
+        lower_servo = [p2,r.uniform(5,12.5),r.randint(0,1)]
+        upper_boom = [p4,r.uniform(5,12.5),r.randint(0,1)]
         servos = [main_boom, rotator, lower_servo, upper_boom]
         for servo in servos:
             if servo[2] == 1:
